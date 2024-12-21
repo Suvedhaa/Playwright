@@ -1,38 +1,26 @@
 import { test, expect } from "@playwright/test";
-import fs from 'fs';
-import csv from 'csv-parser';
-
-async function readCSV(filePath) {
-    return new Promise((resolve, reject) => {
-        const results = [];
-        fs.createReadStream(filePath)
-            .pipe(csv())
-            .on('data', (data) => results.push(data))
-            .on('end', () => resolve(results))
-            .on('error', (error) => reject(error));
-    });
-}
+import { Config } from './utils/read-env-utils';
+import { readCSV } from './utils/read-csv-utils';
 
 test("GET - List Users - test1 - To view response body", async ({ request }) => {
-    const response = await request.get('https://reqres.in/api/users');
+    const response = await request.get(`${process.env.BASE_URL}`);
     const responseBody = await response.json();
     console.log(responseBody);
 });
 
 test("GET - List Users - test2 - To verify status code and message", async ({ request }) => {
-    const response = await request.get('https://reqres.in/api/users');
+    const response = await request.get(`${process.env.BASE_URL}`);
     const statusCode = response.status();
     const statusMessage = response.statusText();
 
-    console.log("Status code = " + statusCode);
-    console.log("Status Message = " + statusMessage);
+    console.log(`Status code = ${statusCode} , Status message = ${statusMessage}`);
 
     await expect(statusCode).toBe(200);
     await expect(statusMessage).toBe("OK");
 });
 
 test("GET - List Users - test3 - To verify the fields in the response body", async ({ request }) => {
-    const response = await request.get('https://reqres.in/api/users');
+    const response = await request.get(`${process.env.BASE_URL}`);
     const responseBody = await response.json();
     console.log(responseBody);
 
@@ -45,7 +33,7 @@ test("GET - List Users - test3 - To verify the fields in the response body", asy
 });
 
 test("GET - List Users - test4 - To verify the fields in the data array", async ({ request }) => {
-    const response = await request.get('https://reqres.in/api/users');
+    const response = await request.get(`${process.env.BASE_URL}`);
     const responseBody = await response.json();
     const data = responseBody.data;
 
@@ -59,7 +47,7 @@ test("GET - List Users - test4 - To verify the fields in the data array", async 
 });
 
 test("GET - List Users - test5 - To verify the values of the fields in the data array - w/o test-data.csv", async ({ request }) => {
-    const response = await request.get('https://reqres.in/api/users');
+    const response = await request.get(`${process.env.BASE_URL}`);
     const responseBody = await response.json();
     const data = responseBody.data;
 
@@ -73,16 +61,16 @@ test("GET - List Users - test5 - To verify the values of the fields in the data 
 });
 
 test("GET - List Users - test6 - To verify the values of the fields in the data array", async ({ request }) => {
-    const response = await request.get('https://reqres.in/api/users');
+    const response = await request.get(`${process.env.BASE_URL}`);
     const responseBody = await response.json();
     const totalResults = responseBody.total;
 
-    const newResponse = await request.get('https://reqres.in/api/users?per_page=' + totalResults);
+    const newResponse = await request.get(`${process.env.BASE_URL}?per_page=${totalResults}`);
     const newResponseBody = await newResponse.json();
 
     const data = newResponseBody.data;
 
-    const testData = await readCSV('tests/API Test/test-data-get-list-users.csv');
+    const testData = await readCSV('tests/api-tests/test-data/test-data-get-list-users.csv');
 
     for (const [index, expectedUser] of testData.entries()) {
         const actualUser = data[index];
@@ -97,25 +85,25 @@ test("GET - List Users - test6 - To verify the values of the fields in the data 
 });
 
 test("GET - List Users - test7 - To verify whether default page value 1 is shown", async ({ request }) => {
-    const response = await request.get('https://reqres.in/api/users');
+    const response = await request.get(`${process.env.BASE_URL}`);
     const responseBody = await response.json();
     const page = responseBody.page;
-    console.log("Page = " + page);
+    console.log(`Page = ${page}`);
     await expect(page).toBe(1);
 });
 
 test("GET - List Users - test8 - To verify whether default per user page limit value 6 is shown", async ({ request }) => {
-    const response = await request.get('https://reqres.in/api/users');
+    const response = await request.get(`${process.env.BASE_URL}`);
     const responseBody = await response.json();
     const perPage = responseBody.per_page;
-    console.log("User per page = " + perPage);
+    console.log(`User per page = ${perPage}`);
     await expect(perPage).toBe(6);
 });
 
 test("GET - List Users - test9 - To verify the total pages value with dynamic per page value and total users", async ({ request }) => {
     const perPageValue = 19; // give any value
 
-    const response = await request.get('https://reqres.in/api/users?per_page=' + perPageValue);
+    const response = await request.get(`${process.env.BASE_URL}?per_page=${perPageValue}`);
     const responseBody = await response.json();
 
     const page = responseBody.page;
@@ -132,20 +120,19 @@ test("GET - List Users - test9 - To verify the total pages value with dynamic pe
 
 test("GET - List Users - test10 - To verify the page value when page=pageValue given as a param", async ({ request }) => {
     const pageValue = 2; // give any value
-    const response = await request.get('https://reqres.in/api/users?page=' + pageValue);
+    const response = await request.get(`${process.env.BASE_URL}?page=${pageValue}`);
     const responseBody = await response.json();
     const page = responseBody.page;
-    console.log("Page = " + page);
+    console.log(`Page = ${page}`);
     await expect(page).toBe(pageValue);
 });
 
 test("GET - List Users - test11 - To verify 404 Not found error thrown - when invalid url is given", async ({ request }) => {
-    const response = await request.get('https://reqres.in/api?users');
+    const response = await request.get('https://reqres.in/apiusers');
     const statusCode = response.status();
     const statusMessage = response.statusText();
 
-    console.log("Status code = " + statusCode);
-    console.log("Status Message = " + statusMessage);
+    console.log(`Status code = ${statusCode} , Status message = ${statusMessage}`);
 
     await expect(statusCode).toBe(404);
     await expect(statusMessage).toBe("Not Found");
