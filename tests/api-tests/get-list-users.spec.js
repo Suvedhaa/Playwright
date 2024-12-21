@@ -3,13 +3,13 @@ import { Config } from './utils/read-env-utils';
 import { readCSV } from './utils/read-csv-utils';
 
 test("GET - List Users - test1 - To view response body", async ({ request }) => {
-    const response = await request.get(`${process.env.BASE_URL}`);
+    const response = await request.get(`${process.env.BASE_URL_Users}`);
     const responseBody = await response.json();
     console.log(responseBody);
 });
 
 test("GET - List Users - test2 - To verify status code and message", async ({ request }) => {
-    const response = await request.get(`${process.env.BASE_URL}`);
+    const response = await request.get(`${process.env.BASE_URL_Users}`);
     const statusCode = response.status();
     const statusMessage = response.statusText();
 
@@ -20,7 +20,7 @@ test("GET - List Users - test2 - To verify status code and message", async ({ re
 });
 
 test("GET - List Users - test3 - To verify the fields in the response body", async ({ request }) => {
-    const response = await request.get(`${process.env.BASE_URL}`);
+    const response = await request.get(`${process.env.BASE_URL_Users}`);
     const responseBody = await response.json();
     console.log(responseBody);
 
@@ -33,7 +33,7 @@ test("GET - List Users - test3 - To verify the fields in the response body", asy
 });
 
 test("GET - List Users - test4 - To verify the fields in the data array", async ({ request }) => {
-    const response = await request.get(`${process.env.BASE_URL}`);
+    const response = await request.get(`${process.env.BASE_URL_Users}`);
     const responseBody = await response.json();
     const data = responseBody.data;
 
@@ -47,7 +47,7 @@ test("GET - List Users - test4 - To verify the fields in the data array", async 
 });
 
 test("GET - List Users - test5 - To verify the values of the fields in the data array - w/o test-data.csv", async ({ request }) => {
-    const response = await request.get(`${process.env.BASE_URL}`);
+    const response = await request.get(`${process.env.BASE_URL_Users}`);
     const responseBody = await response.json();
     const data = responseBody.data;
 
@@ -61,11 +61,11 @@ test("GET - List Users - test5 - To verify the values of the fields in the data 
 });
 
 test("GET - List Users - test6 - To verify the values of the fields in the data array", async ({ request }) => {
-    const response = await request.get(`${process.env.BASE_URL}`);
+    const response = await request.get(`${process.env.BASE_URL_Users}`);
     const responseBody = await response.json();
     const totalResults = responseBody.total;
 
-    const newResponse = await request.get(`${process.env.BASE_URL}?per_page=${totalResults}`);
+    const newResponse = await request.get(`${process.env.BASE_URL_Users}?per_page=${totalResults}`);
     const newResponseBody = await newResponse.json();
 
     const data = newResponseBody.data;
@@ -85,7 +85,7 @@ test("GET - List Users - test6 - To verify the values of the fields in the data 
 });
 
 test("GET - List Users - test7 - To verify whether default page value 1 is shown", async ({ request }) => {
-    const response = await request.get(`${process.env.BASE_URL}`);
+    const response = await request.get(`${process.env.BASE_URL_Users}`);
     const responseBody = await response.json();
     const page = responseBody.page;
     console.log(`Page = ${page}`);
@@ -93,7 +93,7 @@ test("GET - List Users - test7 - To verify whether default page value 1 is shown
 });
 
 test("GET - List Users - test8 - To verify whether default per user page limit value 6 is shown", async ({ request }) => {
-    const response = await request.get(`${process.env.BASE_URL}`);
+    const response = await request.get(`${process.env.BASE_URL_Users}`);
     const responseBody = await response.json();
     const perPage = responseBody.per_page;
     console.log(`User per page = ${perPage}`);
@@ -103,7 +103,7 @@ test("GET - List Users - test8 - To verify whether default per user page limit v
 test("GET - List Users - test9 - To verify the total pages value with dynamic per page value and total users", async ({ request }) => {
     const perPageValue = 19; // give any value
 
-    const response = await request.get(`${process.env.BASE_URL}?per_page=${perPageValue}`);
+    const response = await request.get(`${process.env.BASE_URL_Users}?per_page=${perPageValue}`);
     const responseBody = await response.json();
 
     const page = responseBody.page;
@@ -120,7 +120,7 @@ test("GET - List Users - test9 - To verify the total pages value with dynamic pe
 
 test("GET - List Users - test10 - To verify the page value when page=pageValue given as a param", async ({ request }) => {
     const pageValue = 2; // give any value
-    const response = await request.get(`${process.env.BASE_URL}?page=${pageValue}`);
+    const response = await request.get(`${process.env.BASE_URL_Users}?page=${pageValue}`);
     const responseBody = await response.json();
     const page = responseBody.page;
     console.log(`Page = ${page}`);
