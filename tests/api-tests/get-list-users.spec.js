@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { Config } from './utils/read-env-utils';
-import { readCSV } from './utils/read-csv-utils';
+import { readCSVForRow } from './utils/read-csv-row-utils';
 
 test("GET - List Users - test1 - To view response body", async ({ request }) => {
     const response = await request.get(`${process.env.BASE_URL_Users}`);

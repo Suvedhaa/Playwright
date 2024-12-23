@@ -1,13 +1,10 @@
 import fs from 'fs';
-import csv from 'csv-parser';
+import parse from 'csv-parse/lib/sync';
 
-export async function readCSV(filePath) {
-    return new Promise((resolve, reject) => {
-        const results = [];
-        fs.createReadStream(filePath)
-            .pipe(csv())
-            .on('data', (data) => results.push(data))
-            .on('end', () => resolve(results))
-            .on('error', (error) => reject(error));
-    });
+export function readCsvFile(filePath) {
+  const csvData = fs.readFileSync(filePath, 'utf8');
+  return parse(csvData, {
+    columns: true,
+    skip_empty_lines: true
+  });
 }
