@@ -4,7 +4,7 @@
   "description": "playwright",
   "main": "index.js",
   "scripts": {
-    "test": "npx playwright test post-create.spec.js",
+    "test": "npx playwright test",
     "test:ui": "npx playwright test --ui",
     "test:debug": "npx playwright test --headed --debug",
     "report": "npx playwright show-report"

@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { Config } from './utils/read-env-utils';
-import { readCSVForRow } from './utils/read-csv-row-utils';
+import { readCSVForRow } from './utils/read-csv-rows-utils';
 
 test("GET - List Users - test1 - To view response body", async ({ request }) => {
     const response = await request.get(`${process.env.BASE_URL_Users}`);
@@ -70,7 +70,7 @@ test("GET - List Users - test6 - To verify the values of the fields in the data 
 
     const data = newResponseBody.data;
 
-    const testData = await readCSV('tests/api-tests/test-data/test-data-get-list-users.csv');
+    const testData = await readCSVForRow('tests/api-tests/test-data/test-data-get-list-users.csv');
 
     for (const [index, expectedUser] of testData.entries()) {
         const actualUser = data[index];

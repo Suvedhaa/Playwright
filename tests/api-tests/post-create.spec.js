@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { Config } from './utils/read-env-utils';
 import { readCsvFile } from './utils/read-csv-utils';
 
-const csvFilePath = './tests/api-tests/test-data/test-data-post-create-users.csv';
+const csvFilePath = './tests/api-tests/test-data/test-data-post-put-delete-users.csv';
 const parsedData = readCsvFile(csvFilePath);
 
 let response, responseBody, statusCode, statusMessage, name, job, id, createdAt, newNameValue, newJobValue;
